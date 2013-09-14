@@ -1,0 +1,4 @@
+name = Browser Ponies
+description = Fires the Browser Ponies js library whenever the Konami code is entered
+core = 7.x
+dependencies[] = libraries

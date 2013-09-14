@@ -1,0 +1,39 @@
+<?php
+/**
+ * @file browser_ponies.module
+ * Hook implementations for Browser Ponies.
+ */
+
+/*
+ * Implements hook_init().
+ */
+function browser_ponies_init() {
+  global $base_url;
+  $path = libraries_get_path('Browser-Ponies');
+
+  drupal_add_js(drupal_get_path('module', 'browser_ponies') . '/browser_ponies.js', 'file');
+  drupal_add_js($path . '/basecfg.js', 'file');  
+  drupal_add_js($path . '/browserponies.js', 'file');
+  drupal_add_js(array('browser_ponies' => array(
+    'baseurl' => $base_url . '/' . $path . '/',
+    // @TODO Add admin screen for these variables and get the 
+    // Browser-Ponies library to work with Drupal.settings.browser_ponies. 
+    //'fadeDuration' => 500,
+    //'volume' => 1,
+    //'fps' => 25,
+    //'speed' => 3,
+    //'audioEnabled' => false,
+    //'showFps' => false,
+    //'showLoadProgress' => true,
+    //'speakProbability' => 0.1,
+    //'spawn' => array(
+    //  'applejack' => 1,
+    //  'fluttershy' => 1,
+    //  'pinkie pie' => 1,
+    //  'rainbow dash' => 1,
+    //  'rarity' => 1,
+    //  'twilight sparkle' => 1,
+    //),
+    //'autostart' => true,
+  )), 'setting');
+}
