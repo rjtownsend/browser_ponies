@@ -5,6 +5,22 @@
  */
 
 /*
+ * Implements hook_menu().
+ */
+function browser_ponies_menu() {
+  $items = array();
+  $items['admin/config/user-interface/browser_ponies'] = array(
+    'title' => 'Browser Ponies',
+    'description' => 'Configure the display of Browser Ponies.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('browser_ponies_admin_settings'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+/*
  * Implements hook_init().
  */
 function browser_ponies_init() {
@@ -15,25 +31,136 @@ function browser_ponies_init() {
   drupal_add_js($path . '/basecfg.js', 'file');  
   drupal_add_js($path . '/browserponies.js', 'file');
   drupal_add_js(array('browser_ponies' => array(
-    'baseurl' => $base_url . '/' . $path . '/',
-    // @TODO Add admin screen for these variables and get the 
-    // Browser-Ponies library to work with Drupal.settings.browser_ponies. 
-    //'fadeDuration' => 500,
-    //'volume' => 1,
-    //'fps' => 25,
-    //'speed' => 3,
-    //'audioEnabled' => false,
-    //'showFps' => false,
-    //'showLoadProgress' => true,
-    //'speakProbability' => 0.1,
-    //'spawn' => array(
-    //  'applejack' => 1,
-    //  'fluttershy' => 1,
-    //  'pinkie pie' => 1,
-    //  'rainbow dash' => 1,
-    //  'rarity' => 1,
-    //  'twilight sparkle' => 1,
-    //),
-    //'autostart' => true,
+    'baseurl'            => $base_url . '/' . $path . '/',
+    'fadeDuration'       => variable_get('browser_ponies_fadeDuration', 500),
+    'volume'             => variable_get('browser_ponies_volume', 1),
+    'fps'                => variable_get('browser_ponies_fps', 25),
+    'speed'              => variable_get('browser_ponies_speed', 3),
+    'audioEnabled'       => variable_get('browser_ponies_audioEnabled', false),
+    'showFps'            => variable_get('browser_ponies_showFps', false),
+    'showLoadProgress'   => variable_get('browser_ponies_showLoadProgress', true),
+    'speakProbability'   => variable_get('browser_ponies_speakProbability', 0.1),
+    'spawn' => array(
+      'applejack'        => variable_get('browser_ponies_applejack', 1),
+      'fluttershy'       => variable_get('browser_ponies_fluttershy', 1),
+      'pinkie pie'       => variable_get('browser_ponies_pinkiepie', 1),
+      'rainbow dash'     => variable_get('browser_ponies_rainbowdash', 1),
+      'rarity'           => variable_get('browser_ponies_rarity', 1),
+      'twilight sparkle' => variable_get('browser_ponies_twilightsparkle', 1),
+    ),
+    'autostart'          => variable_get('browser_ponies_autostart', true),
   )), 'setting');
+}
+
+/*
+ * Implements the admin screen.
+ */
+function browser_ponies_admin_settings() {
+  $form = array();
+
+  $form['browser_ponies_showLoadProgress'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show Download Progress Bar'),
+    '#default_value' => variable_get('browser_ponies_showLoadProgress', true),
+  );
+
+  $form['browser_ponies_fadeDuration'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Fade Duration'),
+    '#description' => t('Amount of time in milliseconds for the ponies to appear on the screen'),
+    '#default_value' => variable_get('browser_ponies_fadeDuration', 500),
+    '#required' => TRUE,
+  );
+
+  $form['browser_ponies_audioEnabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable audio if browser supports HTML 5 Audio'),
+    '#default_value' => variable_get('browser_ponies_audioEnabled', false),
+  );
+
+  $form['browser_ponies_volume'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Audio Volume'),
+    '#description' => t('Enter a value between 0 and 1 (eg. 0.1, 0.2, etc)'),
+    '#default_value' => variable_get('browser_ponies_volume', 1),
+  );
+
+  $form['browser_ponies_fps'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Frames Per Second'),
+    '#description' => t('The lower the number, the better the performance'),
+    '#default_value' => variable_get('browser_ponies_fps', 25),
+    '#required' => TRUE,
+  );
+
+  $form['browser_ponies_showFps'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show Frames per Second'),
+    '#default_value' => variable_get('browser_ponies_showFps', false),
+  );
+
+  $form['browser_ponies_speed'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Speed Multiplier'),
+    '#description' => t('How fast are these ponies going?'),
+    '#default_value' => variable_get('browser_ponies_speed', 3),
+    '#required' => TRUE,
+  );
+
+  $form['browser_ponies_speakProbability'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Random Speak Probability'),
+    '#description' => t('Enter a value between 0 and 1 (eg. 0.1, 0.2, etc)'),
+    '#default_value' => variable_get('browser_ponies_speakProbability', 0.1),
+    '#required' => TRUE,
+  );
+
+  $form['browser_ponies_applejack'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Applejack'),
+    '#description' => t('Enter the number of Applejack ponies on the screen'),
+    '#default_value' => variable_get('browser_ponies_applejack', 1),
+    '#required' => TRUE,
+  );
+
+  $form['browser_ponies_fluttershy'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Fluttershy'),
+    '#description' => t('Enter the number of Fluttershy ponies on the screen'),
+    '#default_value' => variable_get('browser_ponies_fluttershy', 1),
+    '#required' => TRUE,
+  );
+
+  $form['browser_ponies_pinkiepie'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Pinkiepie'),
+    '#description' => t('Enter the number of Pinkiepie ponies on the screen'),
+    '#default_value' => variable_get('browser_ponies_pinkiepie', 1),
+    '#required' => TRUE,
+  );
+
+  $form['browser_ponies_rainbowdash'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Rainbowdash'),
+    '#description' => t('Enter the number of Rainbowdash ponies on the screen'),
+    '#default_value' => variable_get('browser_ponies_rainbowdash', 1),
+    '#required' => TRUE,
+  );
+
+  $form['browser_ponies_rarity'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Rarity'),
+    '#description' => t('Enter the number of Rarity ponies on the screen'),
+    '#default_value' => variable_get('browser_ponies_rarity', 1),
+    '#required' => TRUE,
+  );
+
+  $form['browser_ponies_twilightsparkle'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Twilight Sparkle'),
+    '#description' => t('Enter the number of Twilight Sparkle ponies on the screen'),
+    '#default_value' => variable_get('browser_ponies_twilightsparkle', 1),
+    '#required' => TRUE,
+  );
+  return system_settings_form($form);
 }

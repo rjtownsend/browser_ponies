@@ -21,30 +21,12 @@ Drupal.behaviors.browser_ponies = {
         // and check to see if the user has entered the Konami code
         if (keys.toString().indexOf(konami) >= 0) {
           // Load the ponies!
-          (function (cfg) {
+          (function (browerPoniesGo) {
             BrowserPonies.setBaseUrl(Drupal.settings.browser_ponies.baseurl);
             BrowserPonies.loadConfig(BrowserPoniesBaseConfig);
-            BrowserPonies.loadConfig(cfg);
+            BrowserPonies.loadConfig(browerPoniesGo);
           })
-          // @TODO this should be moved to Drupal.settings.browser_ponies
-          ({
-            "fadeDuration":500,
-            "volume":1,"fps":25,
-            "speed":3,
-            "audioEnabled":false,
-            "showFps":false,
-            "showLoadProgress":true,
-            "speakProbability":0.1,
-            "spawn":{
-              "applejack":1,
-              "fluttershy":1,
-              "pinkie pie":1,
-              "rainbow dash":1,
-              "rarity":1,
-              "twilight sparkle":1
-            },
-            "autostart":true,
-          });
+          (Drupal.settings.browser_ponies);
 
           // and finally clean up the keys array
           keys = [];

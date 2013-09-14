@@ -13,10 +13,4 @@ HOW TO INSTALL
 1. Download and install this module; see https://drupal.org/node/70151 for details. 
 2. Download Browser Ponies from GitHub: https://github.com/panzi/Browser-Ponies and install in the
    sites/all/libraries directory. The name of the directory should be Browser-Ponies.
-3. Optionally, edit the browser_ponies.js file to configure pony behaviors. 
-
-TODO
-----
-
-1. Get Browser-Ponies to work with Drupal.settings.browser_ponies
-2. Create admin screen for pony behaviors
+3. Optionally, navigate to admin/config/user-interface/browser_ponies to configure pony behaviors. 
